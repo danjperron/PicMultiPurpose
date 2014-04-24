@@ -25,7 +25,7 @@ Multi-Purpose RS-485 with Modbus Protocol using a small cpu PIC12F1840
     - PicMultiPurposeV1.0.hex   Compile code in hex format.
 
 
-  Add-on file
+  Add-on file for Raspberry Pi
 
     - PicModule.py        Python class interface.
     - configPIC.c         Application to configure each remote module.
