@@ -168,10 +168,10 @@
 
 /*  COMMUNICATION PROTOCOL
 
-     baud rate 9600 , 8 bits data , no parity
+     baud rate 57600 , 8 bits data , no parity
      just send frequency follow by a cariage return
 
-      using TTL UART with fix baud at 9600, 8 bits data, no parity.
+      using TTL UART with fix baud at 57600, 8 bits data, no parity.
 
 
 //////////////////////////  PORT DESCRIPTION
