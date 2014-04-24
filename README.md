@@ -27,17 +27,17 @@ Multi-Purpose RS-485 with Modbus Protocol using a small cpu PIC12F1840
 
   Add-on file
 
-   - PicModule.py        Python class interface.
-   - configPIC.c         Application to configure each remote module.
-   - test.c              Example code to interface the remote with libmodbus in C.
+    - PicModule.py        Python class interface.
+    - configPIC.c         Application to configure each remote module.
+    - test.c              Example code to interface the remote with libmodbus in C.
 
 
   The Schematic
 
-   - PIC_MultiPurpose.jpg  Electronic schematic.
+    - PIC_MultiPurpose.jpg  Electronic schematic.
 
   The GPL License
 
-   - gpl.txt
+    - gpl.txt
 
    
