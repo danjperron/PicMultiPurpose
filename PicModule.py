@@ -26,7 +26,7 @@ class PicMbus:
   IOCONFIG_COUNTER=   128
   IOConfig=[IOCONFIG_INPUT,IOCONFIG_INPUT]
 
-  def __init__(self,SlaveAddress,Baud=115200,Device='/dev/ttyAMA0'):
+  def __init__(self,SlaveAddress,Baud=57600,Device='/dev/serial0'):
     self.SlaveAddress= SlaveAddress
     self.module = minimalmodbus.Instrument(Device,SlaveAddress)
     self.module.serial.baudrate=Baud
