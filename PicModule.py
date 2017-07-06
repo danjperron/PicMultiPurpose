@@ -119,18 +119,9 @@ class PicMbus:
         if value[0] == 0xffff:
            #No Sensor Found
            return None
-        if value[0] == 1:
-           mask = value[2] & 0x60
-           if mask == 0:
-             Factor = 0.0625/8.0
-           elif mask == 0x20:
-             Factor = 0.0625/4.0
-           elif mask == 0x40:
-             Factor = 0.0625/2.0
-           else:
-             Factor = 0.0625
-           Temp = value[1]
-           if(Temp & 0x8000) !=0:
-             Temp-=65536
-           return Temp*Factor
+        Factor = 0.0625
+        Temp = value[1]
+        if(Temp & 0x8000) !=0:
+           Temp-=65536
+        return Temp*Factor
 
