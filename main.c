@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   main.c
  * Author: daniel
  *
@@ -15,7 +15,7 @@
 #include "IOCycle.h"
 #include "DHT22.h"
 #include "DS18B20.h"
-#include "CAPSENSE.h"
+#include "CapSense.h"
 #include "IOConfig.h"
 #include "RCServo.h"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@
 //   logiciel de compilation:  Microchip MPLAB  X IDE (freeware version)
 //
 //  Le mode de communication est série et le protocol est modbus.
-//  
+//
 //  Le port RA2 est utilisé pour interfacer unne puce RS-485 genre LTC485.
 //  Il est toutefois possible d'utiliser plusieur puce en parallèle directement
 //  puisque la sortie RA4 (TX) est en mode entrée lorsque le système
@@ -213,8 +213,8 @@
 
 // CONFIG2
 #pragma config WRT = OFF // Flash Memory Self-Write Protection (Write protection off)
-   
-   
+
+
 #pragma config PLLEN = OFF // PLL Enable (4x PLL enabled)
 
 
@@ -300,15 +300,9 @@ unsigned char ModbusBuffer[10];
 
 /* Timer utilisation
 Timer0  500us    interrupt timer
-Timer1  Sensor timer  utility, 
+Timer1  Sensor timer  utility,
 Timer2  Servo   Utility
 */
-
-
-
-
-
-  
 
 
 // EEPROM LOAD AND SAVE SETTING
@@ -646,16 +640,14 @@ if(TMR2IF){
         TMR0IE=0;
         WaitForEndDeciSecond=0;
         GotCapSenseFlag=1;
-       
     }
     else if(WaitForStartDeciSecond)
     {
-        WaitForStartDeciSecond=0;        
+        WaitForStartDeciSecond=0;
         TMR0=0;
         TMR0IF=0;
         TMR0IE=1;
         WaitForEndDeciSecond=1;
-       
     }
      TimerDeciSec--;
      if(TimerDeciSec==0)
@@ -873,8 +865,8 @@ void SendBytesFrame(unsigned char _Address)
    {
 
       case IOCONFIG_DHT22:
-      case IOCONFIG_DHT11: 
-      case IOCONFIG_DS18B20: 
+      case IOCONFIG_DHT11:
+      case IOCONFIG_DS18B20:
       case IOCONFIG_COUNTER: NByte = 6 ; break;
       case IOCONFIG_CAP_SENSE_OFF:
       case IOCONFIG_CAP_SENSE_LOW:
@@ -899,7 +891,7 @@ void SendBytesFrame(unsigned char _Address)
         }
 
        SendModbusPacket(buffer,NByte+3);
-     }   
+     }
 }
 
 
@@ -919,7 +911,6 @@ void SendPresetFrame()
 
 
    SendModbusPacket(buffer,6);
-   
 }
 
 
@@ -1000,8 +991,8 @@ void   ReadHoldingRegister()
 
 unsigned short ReadIO(unsigned char Pin)
 {
-  
-  BadIO=0;  // clean Bad IO 
+
+  BadIO=0;  // clean Bad IO
   unsigned char ioconfig = Setting.IOConfig[Pin];
   unsigned short temp;
   // ANALOG MODE
@@ -1012,7 +1003,7 @@ unsigned short ReadIO(unsigned char Pin)
           return ReadA2D(IO0_AN_CHANNEL);
       else
         return ReadA2D(IO1_AN_CHANNEL);
-    } 
+    }
 
   // INPUT  & OUTPUT  MODE
   if(ioconfig <= IOCONFIG_OUTPUT)
@@ -1024,16 +1015,6 @@ unsigned short ReadIO(unsigned char Pin)
   }
   else
       return(0xffff);
-  
-  // I/O METHODE A COMPLETER
-  // IOCONFIG_DHT11 
-  // IOCONFIG_DHT22     
-  // IOCONFIG_DS18B20   
-  // IOCONFIG_PWM       
-  // IOCONFIF_SERVO     
-
-  // A COMPLETER
-//  BadIO=1; // Function non valide 
 }
 
 unsigned short ReadVRef()
@@ -1087,10 +1068,8 @@ void   ReadCurrentRegister()
  //   puts("\r\nModbusData=");
  //   printHexUShort(ModbusData);
  //   puts("\r\n");
-   
-
-  // if(ModbusData != 1)
-  //     SendFrameError(ModbusFunction | 0x80, ILLEGAL_DATA_ADDRESS);
+ // if(ModbusData != 1)
+ //     SendFrameError(ModbusFunction | 0x80, ILLEGAL_DATA_ADDRESS);
  //  else
    {
        temp=0;
@@ -1125,7 +1104,7 @@ void ReadInputStatus()
    else if(ModbusAddress ==1)
       SendReadByteFrame(IO1);
    else
-      SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);  
+      SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
 }
 
 void ForceSingleCoil()
@@ -1147,7 +1126,7 @@ void ForceSingleCoil()
               IO1 = ModbusData > 0 ? 1 : 0;
              }
            SendPresetFrame();
-           return;     
+           return;
          }
     }
     SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
@@ -1240,7 +1219,7 @@ void ExecuteCommand(void)
   else if(ModbusFunction == 4)
       ReadCurrentRegister();
   else if(ModbusFunction == 5)
-      ForceSingleCoil();  
+      ForceSingleCoil();
   else if(ModbusFunction == 6)
       PresetSingleRegister();
   else
@@ -1266,8 +1245,6 @@ void ExecuteCommand(void)
  PORTA   	= 0b00100000;
  WPUA		= 0b00111111;	// pull-up ON
 
- 
-
 
  INTCON		= 0b00000000;	// no interrupt
 
@@ -1282,7 +1259,6 @@ void ExecuteCommand(void)
  // set serial com with 9600 baud
 //alternate pin
  APFCON = 0b10000100;
-    
  TXSTA = 0b10000010;
  RCSTA = 0;
 
@@ -1365,7 +1341,7 @@ ModbusOnTransmit=0;
 
  SetIOConfig(0);
  SetIOConfig(1);
-   
+
 
     // clear Modbus system first
  RcvClear();
@@ -1378,7 +1354,6 @@ ModbusOnTransmit=0;
 
   for(loop=0;loop<INPUT_COUNT;loop++)
       ServoTimer[loop]=0;
- 
 
  while(1)
  {
@@ -1391,7 +1366,14 @@ ModbusOnTransmit=0;
      {
          if(!TXIE)
          {
-             __delay_us(200);
+
+	   #if BAUD == 9600
+             __delay_us(1200);
+           #elif BAUD == 115200
+             __delay_us(100);
+           #else
+             __delay_us(200); // assume 57600 BAUD
+           #endif
              TXM_ENABLE=0;
              ModbusOnTransmit=0;
          }

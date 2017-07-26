@@ -9,7 +9,7 @@
 #include "IOCycle.h"
 #include "DS18B20.h"
 #include "IOConfig.h"
-#include "CAPSENSE.h"
+#include "CapSense.h"
 
 
 bit  WaitForStartDeciSecond;
@@ -17,7 +17,7 @@ bit  WaitForEndDeciSecond;
 bit  GotCapSenseFlag;
 
 
-void  CAPSENSECycleIdle(void)
+void  CapSenseCycleIdle(void)
 {
     unsigned char _temp;
    CurrentIOStatus=IO_STATUS_OK;
@@ -52,13 +52,13 @@ void  CAPSENSECycleIdle(void)
 }
 
 
-void DoCAPSENSECycle(void)
+void DoCapSenseCycle(void)
 {
   switch(CurrentIOCycle)
   {
  
     case IO_CYCLE_IDLE:
-                          CAPSENSECycleIdle();
+                          CapSenseCycleIdle();
                           break;
          case IO_CYCLE_START: if(GotCapSenseFlag)
                          {

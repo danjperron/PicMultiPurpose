@@ -12,7 +12,7 @@
 #include "IOCycle.h"
 #include "DS18B20.h"
 #include "DHT22.h"
-#include "CAPSENSE.h"
+#include "CapSense.h"
 
 
 unsigned char CurrentIOStatus;
@@ -97,7 +97,7 @@ void DoIOCycle(void)
 
     // DHT22 Nothing to do data is correct
 
-    
+
     if(CurrentIOStatus==IO_STATUS_BAD)
         SensorPt->WORD[0]=0xffff;
     else
@@ -105,7 +105,7 @@ void DoIOCycle(void)
         SensorPt->BYTE[0]=0;
         SensorPt->BYTE[1]=CurrentIOStatus;
     }
-    
+
     if(CurrentIOSensor == IOCONFIG_DHT11)
     {
        // OK device is only 8 bits so move MSB to LSB and zero MSB
@@ -152,7 +152,7 @@ void DoIOCycle(void)
     else if(CurrentIOSensor & IOCONFIG_DS18B20)
         DoDS18B20Cycle();
     else if(CurrentIOSensor & IOCONFIG_CAP_SENSE_OFF)
-        DoCAPSENSECycle();
+        DoCapSenseCycle();
     else
      {
         // sensor doesn't need cycle  jump to the next one
@@ -181,7 +181,6 @@ void DealWithIOCAF(void )
         }
         else if(CurrentIOSensor & IOCONFIG_DHT11)
             DHT22IOCAF();
-      
     }
     if(_temp&2)
     {
@@ -202,7 +201,6 @@ void DealWithIOCAF(void )
 void ResetIOCycle(void)
 {
  unsigned char loop;
-    
  for(loop=0;loop<INPUT_COUNT;loop++)
  {
     if((Setting.IOConfig[loop]==IOCONFIG_DHT11) ||

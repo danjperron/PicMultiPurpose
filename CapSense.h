@@ -1,5 +1,5 @@
 /* 
- * File:   CAPSENSE.H
+ * File:   CapSense.H
  * Author: Daniel
  *
  * Created on April 8, 2014, 2:42 PM
@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-void DoCAPSENSECycle(void);
+void DoCapSenseCycle(void);
 
 
 extern bit  WaitForStartDeciSecond;
