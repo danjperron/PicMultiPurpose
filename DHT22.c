@@ -42,7 +42,7 @@ void DHT22CycleIdle(void)
 {
  unsigned short _temp;
 
-if(Timerms > 1000)  // more than 1000ms
+ if (Timerms > DHT22_MS_BETWEEN_CONV) // more than 2000ms (oryginal 1000ms)
  {
    // ok Half second pass 
    // time to start pulse
@@ -84,8 +84,8 @@ if(Timerms > 1000)  // more than 1000ms
 
 void DHT22CycleStart(void)
 {
-  // wait until Timerms got at least 2ms (2 counts).
-  if(Timerms >2)
+  // wait until Timerms got sligtly less than 2ms (2 counts).
+  if (Timerms > DHT22_MS_BETWEEN_CONV+2)
   {
     // release for 
      if(CurrentIOPin == 0)

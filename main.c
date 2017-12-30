@@ -136,7 +136,7 @@
 
 
 #define SOFTWARE_ID      0x6532
-#define RELEASE_VERSION 0x0100
+#define RELEASE_VERSION 0x0101
 
 ///////////////////  How to program the IC.
 //
