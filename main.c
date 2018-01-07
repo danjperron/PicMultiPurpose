@@ -136,7 +136,7 @@
 
 
 #define SOFTWARE_ID      0x6532
-#define RELEASE_VERSION 0x0100
+#define RELEASE_VERSION  0x0101
 
 ///////////////////  How to program the IC.
 //
@@ -172,7 +172,7 @@
      just send frequency follow by a cariage return
 
       using TTL UART with fix baud at 57600, 8 bits data, no parity.
-
+*/
 
 //////////////////////////  PORT DESCRIPTION
 /*
@@ -536,7 +536,7 @@ if(IOCIF)
 //    IOCAF=0;
      _TMR0= TMR0;
   TMR0=0;
-      _temp = IOCAF & IOCAN;
+      _temp = (unsigned char) (IOCAF & IOCAN);
 
     if(_temp&1)
     {
@@ -718,7 +718,7 @@ void putch(char char_out)
 
     SerialSum+= (unsigned char) char_out;
 // increment circular pointer InFiFo
-   temp = InFiFo + 1;
+   temp = (unsigned char ) (InFiFo + 1);
    if(temp >= SERIAL_BUFFER_SIZE)
      temp = 0;
 
@@ -736,7 +736,7 @@ InFiFo= temp;
 
 
 
-
+/*
 unsigned char  RcvGetBufferLength(void)
 {
    unsigned char temp;
@@ -745,8 +745,9 @@ unsigned char  RcvGetBufferLength(void)
    temp += RcvInFiFo;
    temp -= RcvOutFiFo;
 
-   return (temp % SERIAL_BUFFER_SIZE);
+   return ((unsigned char ) (temp % SERIAL_BUFFER_SIZE));
 }
+*/
 
 void RcvClear(void)
 {
@@ -757,7 +758,7 @@ void RcvClear(void)
 }
 unsigned char RcvIsDataIn(void)
  {
-     return (RcvInFiFo == RcvOutFiFo ? 0 : 1);
+     return ((unsigned char)(RcvInFiFo == RcvOutFiFo ? 0 : 1));
  }
 
 char RcvGetChar(void)
@@ -776,19 +777,19 @@ char RcvGetChar(void)
     return temp;
 }
 
-
+/*
 void TXM_WAIT(void)
 {
     while(TXIE);
     __delay_us(200);
     TXM_ENABLE=0;
 }
-
+*/
 void SendModbusPacket(char * buffer, int BufferSize)
 {
     unsigned short CRC;
     unsigned char loop;
-    CRC = CRC16(buffer,BufferSize);
+    CRC = (unsigned short) CRC16(buffer,(unsigned char)BufferSize);
     //RS-485 on TRANSMISSION
     ModbusOnTransmit=1;
     TXM_ENABLE=1;
@@ -815,7 +816,7 @@ void  SendFrameError(unsigned char Function , unsigned char ErrorCode)
     unsigned char buffer[3];
 
     buffer[0]= Setting.SlaveAddress;
-    buffer[1]= Function | 0x80;
+    buffer[1]= (unsigned char) ( Function | 0x80);
     buffer[2]= ErrorCode;
     SendModbusPacket(buffer,3);
 }
@@ -876,7 +877,7 @@ void SendBytesFrame(unsigned char _Address)
    }
 
     if(NByte==0)
-         SendFrameError(ModbusFunction | 0x80, ILLEGAL_DATA_ADDRESS);
+         SendFrameError((unsigned char)(ModbusFunction | 0x80), ILLEGAL_DATA_ADDRESS);
     else
      {
        buffer[0]= Setting.SlaveAddress;
@@ -887,7 +888,7 @@ void SendBytesFrame(unsigned char _Address)
        for(loop=0;loop<NByte;loop++)
         {
            _temp= IOSensorData[SensorId].BYTE[loop];
-          buffer[3+loop]=_temp;
+          buffer[(unsigned char)(3+loop)]=_temp;
         }
 
        SendModbusPacket(buffer,NByte+3);
@@ -983,7 +984,7 @@ void   ReadHoldingRegister()
       Flag= 1;
 
     if(Flag)
-     SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
+     SendFrameError((unsigned char) (ModbusFunction | 0x80) , ILLEGAL_DATA_ADDRESS);
     else
      SendReadFrame(temp);
 }
@@ -1009,9 +1010,9 @@ unsigned short ReadIO(unsigned char Pin)
   if(ioconfig <= IOCONFIG_OUTPUT)
   {
     if(Pin==0)
-      return IO0;
+      return (unsigned short) IO0;
     else
-      return IO1;
+      return (unsigned short) IO1;
   }
   else
       return(0xffff);
@@ -1088,7 +1089,7 @@ void   ReadCurrentRegister()
            default: BadIO=1;
        }
        if(BadIO)
-         SendFrameError(ModbusFunction | 0x80, ILLEGAL_DATA_ADDRESS);
+         SendFrameError((unsigned char) (ModbusFunction | 0x80), ILLEGAL_DATA_ADDRESS);
        else
          SendReadFrame(temp);
    }
@@ -1100,11 +1101,11 @@ void ReadInputStatus()
   // Read Coil ou Read Input Status
   // seulement starting address 0 et 2 points possible
    if(ModbusAddress == 0)
-      SendReadByteFrame(IO0);
+      SendReadByteFrame((unsigned char) IO0);
    else if(ModbusAddress ==1)
-      SendReadByteFrame(IO1);
+      SendReadByteFrame((unsigned char)IO1);
    else
-      SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
+      SendFrameError((unsigned char) (ModbusFunction | 0x80) , ILLEGAL_DATA_ADDRESS);
 }
 
 void ForceSingleCoil()
@@ -1129,7 +1130,7 @@ void ForceSingleCoil()
            return;
          }
     }
-    SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
+    SendFrameError((unsigned char)(ModbusFunction | 0x80) , ILLEGAL_DATA_ADDRESS);
 }
 
 
@@ -1156,7 +1157,7 @@ void PresetSingleRegister()
         {
          Setting.IOConfig[temp]=oldConfig;
          SetIOConfig(temp);
-         SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
+         SendFrameError((unsigned char)(ModbusFunction | 0x80) , ILLEGAL_DATA_ADDRESS);
         }
       else
         {
@@ -1194,7 +1195,7 @@ void PresetSingleRegister()
       SendPresetFrame();
     }
     else
-       SendFrameError(ModbusFunction | 0x80 , ILLEGAL_DATA_ADDRESS);
+       SendFrameError((unsigned char)(ModbusFunction | 0x80) , ILLEGAL_DATA_ADDRESS);
 }
 
 
@@ -1223,7 +1224,7 @@ void ExecuteCommand(void)
   else if(ModbusFunction == 6)
       PresetSingleRegister();
   else
-     SendFrameError(ModbusFunction | 0x80, ILLEGAL_FUNCTION);
+     SendFrameError((unsigned char)(ModbusFunction | 0x80), ILLEGAL_FUNCTION);
 }
 
 
@@ -1401,7 +1402,7 @@ ModbusOnTransmit=0;
           {
               // something wrong then just shift data
               for(loop=1;loop<8;loop++)
-                  ModbusBuffer[loop-1]=ModbusBuffer[loop];
+                  ModbusBuffer[(unsigned char)(loop-1)]=ModbusBuffer[loop];
               ModbusFramePointer--;
           }
          }

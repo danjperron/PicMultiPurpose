@@ -49,7 +49,7 @@ void SetTimer0Delay1us(unsigned char value)
         // assum 32Mhz
         OPTION_REG= 0b00000010;
 #endif
-        TMR0 = ~(value)+1;
+        TMR0 = (unsigned char ) (~(value)+1);
         TMR0IF=0;
 }
 
@@ -64,7 +64,7 @@ void SetTimer0Delay32us(unsigned char value)
         // assum 32Mhz
         OPTION_REG= 0b00000111;
 #endif
-        TMR0 = ~(value)+1;
+        TMR0 = (unsigned char ) (~(value)+1);
         TMR0IF=0;
 }
 
@@ -207,8 +207,7 @@ void DS18B20Write(unsigned char value)
    SetTimer0Delay1us(60);
    while(!TMR0IF);
      }
-      
-
+ 
       if(CurrentIOPin == 0)
         IO0_TRIS= 1;
      else
@@ -265,6 +264,22 @@ void DoDS18B20Cycle(void)
                         break;
     case IO_CYCLE_DS18B20_CONVERT_T:
                         DS18B20Write(DS18B20_CONVERT_T);
+                        
+                        // let's add PARASITE mode
+                        // output HIGH until end of conversion
+                        if(CurrentIOPin == 0)
+                        {
+                           IO0 = 1;
+                           IO0_TRIS= 0;
+                            
+                        }
+                        else
+                        {   
+                           IO1 = 1;
+                           IO1_TRIS=0;
+                        }
+                        
+                        
                         waitLoop=125;
                         // set 8 ms delay 32us * 250 = 8 ms
                         SetTimer0Delay32us(250);

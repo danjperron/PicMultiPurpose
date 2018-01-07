@@ -46,7 +46,7 @@ if(Timerms > 1000)  // more than 1000ms
  {
    // ok Half second pass 
    // time to start pulse
-  
+   
   if(CurrentIOPin == 0)
    {
       IOCANbits.IOCAN0=0;
@@ -62,7 +62,7 @@ if(Timerms > 1000)  // more than 1000ms
       IO1_TRIS=0;
       IO1=0;
   }
-  
+    Timerms=0;
     CurrentIOCycle= IO_CYCLE_START;
     BitCount=40;
     WorkingCount=8;

@@ -214,15 +214,3 @@ void ResetIOCycle(void)
 }
 
 
-
-void SetIOChange(unsigned char Pin, unsigned char value)
-{
-    if(Pin==0)
-        IOCANbits.IOCAN0= value;
-    else
-        IOCANbits.IOCAN1= value;
-}
-
-
-
-

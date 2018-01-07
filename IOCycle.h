@@ -2,6 +2,8 @@
 #define IOCYCLE
 
 
+#define SetIOChange(A,B)  if(A==0) IOCANbits.IOCAN0=B
+
 
 #include "IOConfig.h"
 
@@ -48,7 +50,7 @@ extern SensorDataUnion  IOSensorData[INPUT_COUNT];
 extern void DoIOCycle(void);
 //extern void DealWithIOCAF(void );
 extern void ResetIOCycle(void);
-extern void SetIOChange(unsigned char Pin, unsigned char value);
+
 
 
 extern volatile unsigned char _TMR0;
