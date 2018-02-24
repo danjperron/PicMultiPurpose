@@ -20,6 +20,10 @@ extern unsigned char ServoIndex;
 extern volatile unsigned short CurrentServoTimer;
 extern unsigned short ServoTimer[INPUT_COUNT];
 
+#define SERVO_REFRESCH_PERIOD 20000 //us
+#define SERVO_MAX_ACTIVE_TIME 2500  //us
+#define SERVO_MIN_ACTIVE_TIME 500   //us
+
 /*
  * Servo Index
  *
