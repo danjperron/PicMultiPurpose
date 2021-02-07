@@ -50,7 +50,7 @@ V1.0
 #include <termios.h>
 
 #include <modbus.h>
-
+#include <ctype.h>
 typedef struct
 {
 unsigned short     mode;
@@ -307,10 +307,12 @@ void scanBus(modbus_t * mb)
 
 
 //set 1/100th of second response time
-   struct timeval response;
-   response.tv_sec=0;
-   response.tv_usec=10000;
- modbus_set_response_timeout(mb, &response);
+// new version used directly uint32_t variable
+//  struct timeval response;
+//   response.tv_sec=0;
+//   response.tv_usec=timeout;
+// modbus_set_response_timeout(mb, &response);
+modbus_set_response_timeout(mb,0, (uint32_t) 10000);
 
 
   printf("\n==== Scanning MODBUS\n");fflush(stdout);
